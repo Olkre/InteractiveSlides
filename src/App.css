@@ -3,6 +3,11 @@
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 
+:root {
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 .third-slide .slide-in {
   opacity: 0;
   transform: translateY(28px);
@@ -53,11 +58,119 @@
   position: absolute;
   left: 0;
   top: 0;
+  transform: scale(0);
+  opacity: 0;
   animation: animloader 2s linear infinite;
+  animation-fill-mode: both;
 }
 
 .loader::after {
   animation-delay: 1s;
+}
+
+.step-loader {
+  width: 34px;
+  height: 34px;
+  display: inline-block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.step-loader::after,
+.step-loader::before {
+  content: "";
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #22c55e;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: scale(0);
+  opacity: 0;
+  animation: animloader 1.6s linear infinite;
+  animation-fill-mode: both;
+}
+
+.step-loader::after {
+  animation-delay: 0.8s;
+}
+
+.step-connector {
+  background-size: 100% 8px;
+  background-repeat: repeat-y;
+}
+
+.step-connector-pending {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(63 63 70 / 0.3) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.step-connector-done {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(34 197 94 / 0.7) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.step-connector-progress {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(34 197 94 / 0.95) 0 4px,
+    transparent 4px 8px
+  );
+  animation: step-dash-flow 450ms linear infinite;
+}
+
+.step-connector-finishing {
+  animation: step-dash-finish 220ms var(--ease-out-strong) forwards;
+}
+
+@keyframes step-dash-flow {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 8px;
+  }
+}
+
+@keyframes step-dash-finish {
+  from {
+    background-position: 0 8px;
+    opacity: 1;
+  }
+  to {
+    background-position: 0 0;
+    opacity: 1;
+  }
+}
+
+.step-circle-transition {
+  animation: step-circle-spring 260ms var(--ease-spring);
+}
+
+@keyframes step-circle-spring {
+  0% {
+    transform: scale(0.985);
+    filter: blur(1px);
+  }
+  65% {
+    transform: scale(1.02);
+    filter: blur(0.35px);
+  }
+  100% {
+    transform: scale(1);
+    filter: blur(0);
+  }
 }
 
 @keyframes animloader {

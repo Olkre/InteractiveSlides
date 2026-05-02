@@ -1,7 +1,9 @@
 import reactLogo from './assets/react.svg'
 import { RevealDeck } from './RevealDeck'
 import { FirstSlide } from './slides/FirstSlide'
+import { QuestionsSlide } from './slides/QuestionsSlide'
 import { SecondSlide } from './slides/SecondSlide'
+import { SpacingHierarchySlide } from './slides/SpacingHierarchySlide'
 import { ThirdSlide } from './slides/ThirdSlide'
 import './App.css'
 
@@ -11,6 +13,8 @@ export default function App() {
       <FirstSlide />
       <SecondSlide />
       <ThirdSlide />
+      <SpacingHierarchySlide />
+      <QuestionsSlide />
 
       <section>
         <h2>React components as slides</h2>

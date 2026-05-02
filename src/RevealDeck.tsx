@@ -33,6 +33,7 @@ export function RevealDeck({ children }: RevealDeckProps) {
       transition: 'fade',
       width: 1280,
       height: 720,
+      margin: 0,
     })
 
     const syncViewportChrome = () => {
