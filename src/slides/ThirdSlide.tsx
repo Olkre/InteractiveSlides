@@ -51,7 +51,6 @@ export function ThirdSlide() {
   return (
     <section
       className="third-slide flex h-full flex-col items-center justify-center bg-[#F6F7FB]"
-      data-background-color="#F6F7FB"
       data-viewport-background="#F6F7FB"
       data-text-scheme="dark"
     >

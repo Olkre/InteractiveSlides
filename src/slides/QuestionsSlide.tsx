@@ -3,11 +3,10 @@ import { MeshGradient } from "@paper-design/shaders-react";
 export function QuestionsSlide() {
   return (
     <section
-      className="relative flex h-full flex-col items-center justify-center gap-4 overflow-visible text-white"
-      data-background-color="#0D1B2A"
+      className="questions-slide relative h-full w-full  text-white"
       data-viewport-background="#0D1B2A"
     >
-      <div className="absolute left-1/2 top-1/2 -z-0 h-[140%] w-[120%] -translate-x-1/2 -translate-y-1/2">
+      <div className="questions-slide-gradient absolute left-1/2 top-1/2 -z-0 h-[140%] w-[120%] -translate-x-1/2 -translate-y-1/2">
         <MeshGradient
           speed={0.69}
           scale={0.81}
@@ -19,9 +18,13 @@ export function QuestionsSlide() {
         />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-4">
-        <h2 className="!text-8xl font-semibold tracking-tight">Questions?</h2>
-        <p className="!text-3xl text-white/85">Thank you.</p>
+      <div className="relative z-10 flex h-full w-full items-center justify-center">
+        <div className="questions-slide-text flex flex-col items-center gap-4">
+          <h2 className="!text-8xl font-semibold tracking-tighter">
+            Questions?
+          </h2>
+          <p className="!text-3xl text-white/85">Thank you.</p>
+        </div>
       </div>
     </section>
   );

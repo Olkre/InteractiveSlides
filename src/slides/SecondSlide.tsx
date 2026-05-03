@@ -105,9 +105,12 @@ const cards: Card[] = [
 
 export function SecondSlide() {
   return (
-    <section className="second-slide flex h-full flex-col gap-10 px-6 pb-8 pt-4 md:px-10">
+    <section
+      className="second-slide flex h-full flex-col gap-10 bg-[#18181b] px-6 pb-8 pt-4 md:px-10"
+      data-viewport-background="#18181b"
+    >
       <div className="flex h-full flex-col items-center justify-center gap-3">
-        <h2 className="shrink-0 text-center !text-6xl font-semibold tracking-tight text-white md:text-4xl">
+        <h2 className="second-slide-title shrink-0 text-center !text-6xl font-semibold tracking-tight text-white md:text-4xl">
           Building blocks
         </h2>
 

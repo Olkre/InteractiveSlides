@@ -1,7 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import Reveal from 'reveal.js'
 import 'reveal.js/reveal.css'
-import 'reveal.js/reset.css'
 import './reveal-black-geist.css'
 
 type RevealDeckProps = {
@@ -20,6 +19,8 @@ function resolveViewportBackground(slide: HTMLElement | null): string | undefine
   return undefined
 }
 
+const DEFAULT_VIEWPORT_CHROME = '#191919'
+
 export function RevealDeck({ children }: RevealDeckProps) {
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -37,14 +38,11 @@ export function RevealDeck({ children }: RevealDeckProps) {
     })
 
     const syncViewportChrome = () => {
-      const viewport = deck.getViewportElement()
-      if (!viewport) return
-      const bg = resolveViewportBackground(deck.getCurrentSlide())
-      if (bg) {
-        viewport.style.background = bg
-      } else {
-        viewport.style.removeProperty('background')
-      }
+      if (!deck.getViewportElement()) return
+      const resolved = resolveViewportBackground(deck.getCurrentSlide())?.trim()
+      const color =
+        resolved && resolved.length > 0 ? resolved : DEFAULT_VIEWPORT_CHROME
+      document.documentElement.style.setProperty('--deck-viewport-bg', color)
     }
 
     let cancelled = false
@@ -58,6 +56,7 @@ export function RevealDeck({ children }: RevealDeckProps) {
       cancelled = true
       deck.off('slidechanged', syncViewportChrome)
       deck.destroy()
+      document.documentElement.style.removeProperty('--deck-viewport-bg')
     }
   }, [])
 

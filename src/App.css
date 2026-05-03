@@ -1,11 +1,92 @@
-@layer theme, base, components, utilities;
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/preflight.css" layer(base);
-@import "tailwindcss/utilities.css" layer(utilities);
-
+/*
+ * Full-page Reveal uses document.body as .reveal-viewport. reveal.css sets that
+ * to white, and Tailwind base sets body to --background (white), so letterboxing
+ * and the area around the scaled deck stayed white. Drive the real chrome from
+ * --deck-viewport-bg (set in RevealDeck from each slide’s data-viewport-background).
+ */
 :root {
-  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --deck-viewport-bg: #191919;
+  --deck-viewport-transition: 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  --text-swap-dur: 200ms;
+  --text-swap-blur: 2px;
+  --text-swap-ease: ease-out;
+  --text-swap-scale-from: 0.96;
+  --text-swap-scale-to: 1;
+}
+
+html.reveal-full-page {
+  background-color: var(--deck-viewport-bg);
+  transition: background-color var(--deck-viewport-transition);
+}
+
+html.reveal-full-page body.reveal-viewport {
+  background-color: var(--deck-viewport-bg);
+  transition: background-color var(--deck-viewport-transition);
+}
+
+html.reveal-full-page #root {
+  background-color: var(--deck-viewport-bg);
+  transition: background-color var(--deck-viewport-transition);
+}
+
+/* First slide — intro: slide in; text blurs from soft to sharp */
+.first-slide .first-intro {
+  opacity: 0;
+  transform: translateY(36px);
+}
+
+.first-slide .first-intro-visual {
+  filter: none;
+}
+
+.first-slide .first-intro-text {
+  filter: blur(14px);
+}
+
+.reveal .slides section.first-slide.present .first-intro {
+  animation: first-slide-intro-enter 820ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal .slides section.first-slide.present .first-intro-text {
+  animation: first-slide-intro-text-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal .slides section.first-slide.present .first-intro-visual {
+  animation-delay: 80ms;
+}
+
+.reveal .slides section.first-slide.present .first-intro-text:not(.first-intro-byline) {
+  animation-delay: 200ms;
+}
+
+.reveal .slides section.first-slide.present .first-intro-byline {
+  animation-delay: 380ms;
+}
+
+@keyframes first-slide-intro-enter {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes first-slide-intro-text-enter {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+    filter: blur(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 .third-slide .slide-in {
@@ -37,6 +118,247 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.visibility-status-slide .slide-in-vs {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal .slides section.visibility-status-slide.present .slide-in-vs {
+  animation: visibility-status-enter 600ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.reveal .slides section.visibility-status-slide.present .slide-in-vs-1 {
+  animation-delay: 70ms;
+}
+
+.reveal .slides section.visibility-status-slide.present .slide-in-vs-2 {
+  animation-delay: 170ms;
+}
+
+@keyframes visibility-status-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.status-action-button {
+  --status-action-pad-x: 14px;
+  --status-action-inline-gap: 6px;
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  padding-inline: var(--status-action-pad-x);
+  justify-content: center;
+  align-items: center;
+  transition:
+    border-color 200ms ease-out,
+    background-color 200ms ease-out,
+    color 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+
+.status-action-button[data-done="true"] {
+  border: 1px solid rgb(22 163 74 / 0.95);
+  background: rgb(34 197 94 / 1);
+  color: rgb(255 255 255 / 1);
+  box-shadow:
+    0 -1px 0 1px rgb(20 83 45 / 0.85) inset,
+    0 0 0 1px rgb(22 163 74 / 0.95) inset,
+    0 0.5px 0 1.5px rgb(134 239 172 / 0.9) inset;
+}
+
+.status-action-button[data-done="true"]:hover {
+  background: rgb(22 163 74 / 1);
+  border-color: rgb(21 128 61 / 0.98);
+  box-shadow:
+    0 -1px 0 1px rgb(20 83 45 / 0.92) inset,
+    0 0 0 1px rgb(22 163 74 / 1) inset,
+    0 0.5px 0 1.5px rgb(187 247 208 / 0.85) inset;
+}
+
+.status-action-button[data-done="true"]:active {
+  background: rgb(21 128 61 / 1);
+  border-color: rgb(20 83 45 / 0.98);
+  box-shadow:
+    -1px 0 1px 0 rgb(0 0 0 / 0.2) inset,
+    1px 0 1px 0 rgb(0 0 0 / 0.2) inset,
+    0 2px 0 0 rgb(0 0 0 / 0.35) inset;
+}
+
+.status-action-button-icon-only {
+  min-width: 56px;
+}
+
+.status-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(1);
+  transition:
+    opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    filter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.status-action-icon-idle {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  opacity: 1;
+}
+
+.status-action-icon-done {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%) scale(0.97);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.status-action-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.status-action-label-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.status-action-inline-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-end: var(--status-action-inline-gap);
+}
+
+.status-action-inline-check svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.copy-icon-slot {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(var(--text-swap-scale-to));
+  filter: blur(0);
+  opacity: 1;
+  transition:
+    transform var(--text-swap-dur) var(--text-swap-ease),
+    filter var(--text-swap-dur) var(--text-swap-ease),
+    opacity var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+
+.copy-icon-done {
+  z-index: 1;
+  transform: scale(var(--text-swap-scale-from));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+}
+
+.copy-action-button[data-done="true"] .copy-icon-idle {
+  transform: scale(var(--text-swap-scale-from));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+}
+
+.copy-action-button[data-done="true"] .copy-icon-done {
+  transform: scale(var(--text-swap-scale-to));
+  filter: blur(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-icon-slot {
+    transition: none !important;
+  }
+}
+
+.status-action-button[data-done="true"] .status-action-icon-idle {
+  opacity: 0;
+  transform: translateY(-50%) scale(0.985);
+  filter: blur(2px);
+}
+
+.status-action-button[data-done="true"] .status-action-icon-done {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+  filter: blur(0);
+}
+
+.status-action-button-icon-only .status-action-icon-idle {
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.status-action-button-icon-only .status-action-icon-done {
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.97);
+}
+
+.status-action-button-icon-only[data-done="true"] .status-action-icon-idle {
+  transform: translate(-50%, -50%) scale(0.985);
+}
+
+.status-action-button-icon-only[data-done="true"] .status-action-icon-done {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.t-text-swap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transform: scale(var(--text-swap-scale-to));
+  filter: blur(0);
+  opacity: 1;
+  transition:
+    transform var(--text-swap-dur) var(--text-swap-ease),
+    filter var(--text-swap-dur) var(--text-swap-ease),
+    opacity var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+
+.t-text-swap.is-exit {
+  transform: scale(var(--text-swap-scale-from));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+}
+
+.t-text-swap.is-enter-start {
+  transform: scale(var(--text-swap-scale-from));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-text-swap {
+    transition: none !important;
   }
 }
 
@@ -182,4 +504,96 @@
     transform: scale(1);
     opacity: 0;
   }
+}
+
+.spacing-hierarchy-slide .slide-in-sh {
+  opacity: 0;
+  transform: translateY(26px);
+}
+
+.reveal .slides section.spacing-hierarchy-slide.present .slide-in-sh {
+  animation: spacing-hierarchy-slide-enter 680ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal .slides section.spacing-hierarchy-slide.present .slide-in-sh-1 {
+  animation-delay: 70ms;
+}
+
+.reveal .slides section.spacing-hierarchy-slide.present .slide-in-sh-2 {
+  animation-delay: 190ms;
+}
+
+@keyframes spacing-hierarchy-slide-enter {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.questions-slide .questions-slide-gradient {
+  opacity: 0;
+}
+
+.questions-slide .questions-slide-text {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(14px);
+}
+
+.reveal .slides section.questions-slide.present .questions-slide-gradient {
+  animation: questions-slide-gradient-enter 920ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal .slides section.questions-slide.present .questions-slide-text {
+  animation: questions-slide-text-enter 760ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 160ms;
+}
+
+@keyframes questions-slide-gradient-enter {
+  from {
+    opacity: 0;
+    filter: saturate(88%);
+  }
+
+  to {
+    opacity: 1;
+    filter: saturate(100%);
+  }
+}
+
+@keyframes questions-slide-text-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Keep app-like form styling on the QR controls slide. */
+.reveal .slides section.spacing-hierarchy-slide p {
+  margin: 0;
+  line-height: 1.25;
+}
+
+.reveal .slides section.spacing-hierarchy-slide label {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.reveal .slides section.spacing-hierarchy-slide input,
+.reveal .slides section.spacing-hierarchy-slide select,
+.reveal .slides section.spacing-hierarchy-slide button {
+  font: inherit;
+  line-height: 1.2;
 }
