@@ -7,6 +7,7 @@ import { QuestionsSlide } from './slides/QuestionsSlide'
 import { SecondSlide } from './slides/SecondSlide'
 import { SpacingHierarchySlide } from './slides/SpacingHierarchySlide'
 import { TabsSlide } from './slides/TabsSlide'
+import { ResponsivenessSlide } from './slides/ResponsivenessSlide'
 import { ThirdSlide } from './slides/ThirdSlide'
 import { VisibilitySystemStatusSlide } from './slides/VisibilitySystemStatusSlide'
 import './App.css'
@@ -20,6 +21,7 @@ export default function App() {
         <FirstSlide />
         <SecondSlide />
         <ThirdSlide />
+        <ResponsivenessSlide />
         <VisibilitySystemStatusSlide />
         <SpacingHierarchySlide />
         <QuestionsSlide />
